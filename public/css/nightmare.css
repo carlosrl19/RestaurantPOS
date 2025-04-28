@@ -1,0 +1,221 @@
+.clamp_text {
+    font-size: clamp(0.6rem, 3vw, 0.7rem);
+}
+
+.clamp_text_sm {
+    font-size: clamp(0.5rem, 3vw, 0.6rem);
+}
+
+.clamp_text_sm_2 {
+    font-size: clamp(0.3rem, 3vw, 0.55rem);
+}
+
+.clamp_error_text_sm {
+    font-size: clamp(0.3rem, 3vw, 0.4rem);
+}
+
+.clamp_text_modal {
+    font-size: clamp(0.5rem, 3vw, 0.7rem);
+}
+
+.input_form {
+    font-size: clamp(0.6rem, 3vw, 0.7rem);
+}
+
+.btn-form {
+    font-size: clamp(0.4rem, 3vw, 0.6rem);
+}
+
+.label_form {
+    font-size: clamp(0.6rem, 3vw, 0.7rem);
+}
+
+.clamp_text_toast {
+    font-size: clamp(0.6rem, 3vw, 0.7rem);
+}
+
+.invalid-feedback {
+    font-size: clamp(0.5rem, 3vw, 0.6rem);
+}
+
+.border-primary-left {
+    opacity: 1;
+    border-left: 3px solid #3b7ddd;
+}
+
+.border-secondary-left {
+    opacity: 1;
+    border-left: 3px solid #6c757d;
+}
+
+.border-success-top {
+    opacity: 1;
+    border-top: 4px solid #1cbb8c;
+}
+
+.border-warning-top {
+    opacity: 1;
+    border-top: 4px solid #fcb92c;
+}
+
+.border-danger-top {
+    opacity: 1;
+    border-top: 4px solid #dc3545;
+}
+
+.display_none {
+    display: none;
+}
+
+.clamp_font_h2 {
+    font-size: clamp(0.7rem, 3vw, 1.2rem);
+}
+
+.clamp_font_h3 {
+    font-size: clamp(0.6rem, 3vw, 0.9rem);
+}
+
+.clamp_font_h4 {
+    font-size: clamp(0.4rem, 3vw, 0.7rem);
+}
+
+.text-underline {
+    text-decoration: underline;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+.text-bold-900 {
+    font-weight: 900;
+}
+
+.text-bolder {
+    font-weight: bolder;
+}
+
+.text-muted-light {
+    color: #66738267;
+}
+
+.text-muted-light-2 {
+    color: #66738293;
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(1.6px, 0);
+    }
+
+    25% {
+        transform: translate(-1.6px, 0);
+    }
+
+    50% {
+        transform: translate(1.6px, 0);
+    }
+
+    75% {
+        transform: translate(-1.6px, 0);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+.btn-danger.shake {
+    animation: shake 0.5s infinite;
+    /* Añadido 'infinite' para que sea continuo */
+}
+
+.toast {
+    --bs-toast-zindex: 1090;
+    --bs-toast-padding-x: 0.75rem;
+    --bs-toast-padding-y: 0.5rem;
+    --bs-toast-spacing: 1.5rem;
+    --bs-toast-max-width: auto;
+    --bs-toast-font-size: 0.875rem;
+    --bs-toast-box-shadow: var(--bs-box-shadow);
+    --bs-toast-header-color: var(--bs-secondary-color);
+    --bs-toast-header-bg: rgba(var(--bs-body-bg-rgb), 0.85);
+    width: var(--bs-toast-max-width);
+    max-width: 100%;
+    font-size: var(--bs-toast-font-size);
+    color: var(--bs-toast-color);
+    pointer-events: auto;
+    background-color: var(--bs-toast-bg);
+    background-clip: padding-box;
+    box-shadow: var(--bs-toast-box-shadow);
+}
+
+.toast.showing {
+    opacity: 0;
+}
+
+.toast:not(.show) {
+    display: none;
+}
+
+.toast-container {
+    --bs-toast-zindex: 1090;
+    position: absolute;
+    z-index: var(--bs-toast-zindex);
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+    max-width: 100%;
+    pointer-events: none;
+}
+
+.toast-container> :not(:last-child) {
+    margin-bottom: var(--bs-toast-spacing);
+}
+
+.toast-header {
+    display: flex;
+    align-items: center;
+    padding: var(--bs-toast-padding-y) var(--bs-toast-padding-x);
+    color: var(--bs-toast-header-color);
+    background-color: var(--bs-toast-header-bg);
+    background-clip: padding-box;
+    border-bottom: var(--bs-toast-border-width) solid var(--bs-toast-header-border-color);
+    border-top-left-radius: calc(var(--bs-toast-border-radius) - var(--bs-toast-border-width));
+    border-top-right-radius: calc(var(--bs-toast-border-radius) - var(--bs-toast-border-width));
+}
+
+.toast-header .btn-close {
+    margin-right: calc(-0.5 * var(--bs-toast-padding-x));
+    margin-left: var(--bs-toast-padding-x);
+}
+
+.toast-body {
+    padding: var(--bs-toast-padding-x);
+    word-wrap: break-word;
+}
+
+.toast-success {
+    background-color: #1cbb8c;
+    color: #fff;
+}
+
+.toast-info {
+    background-color: #1c6ebb;
+    color: #fff;
+}
+
+.toast-error {
+    background-color: #e22f2fc9;
+    color: #fff;
+}
+
+.toast-warning {
+    background-color: #f76707;
+    color: #fff;
+}
+
+.card_padding {
+    padding: 5px;
+    background-color: #b2b5b81c;
+}

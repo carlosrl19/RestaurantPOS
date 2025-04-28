@@ -1,0 +1,46 @@
+.header-modal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo_factura img {
+    max-width: 100%;
+    height: auto;
+}
+
+.info_empresa {
+    flex-grow: 1;
+    margin-left: 20px;
+}
+
+.info_factura {
+    text-align: right;
+}
+
+.productos-lista {
+    margin-top: 20px;
+}
+
+/* Simulación de tabla */
+.row-tabla {
+    display: grid;
+    grid-template-columns: 40% 20% 22% 23%;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.productos-header {
+    font-weight: bold;
+    background-color: #f5f5f5;
+}
+
+.producto-item span {
+    text-align: left;
+}
+
+.producto-item span:nth-child(2),
+.producto-item span:nth-child(3),
+.producto-item span:nth-child(5) {
+    text-align: left;
+}
