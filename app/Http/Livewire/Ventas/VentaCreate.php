@@ -125,15 +125,17 @@ class VentaCreate extends Component
         $this->carrito[$index]["total"] = $this->carrito[$index]["cantidad_detalle_venta"] * $this->carrito[$index]["precio_venta"];
     }
 
-    public function agregar_item_carrito($producto)
-    {
-        $item = [
-            "producto_id" => $producto["id"],
-            "detalle" => "{$producto["product_name"]}",
-            "cantidad_detalle_venta" => 1,
-            "precio_venta" => $producto["product_sell_price"],
-            "total" => $producto["product_sell_price"],
-        ];
+public function agregar_item_carrito($producto)
+{
+    $item = [
+        "id" => $producto["id"], // ← Añadir ID para usar en wire:key
+        "producto_id" => $producto["id"], // se puede mantener esto si se va usar para otro lado
+        "detalle" => "{$producto["product_name"]}",
+        "product_image" => $producto["product_image"], // ← Añadir imagen
+        "cantidad_detalle_venta" => 1,
+        "precio_venta" => $producto["product_sell_price"],
+        "total" => $producto["product_sell_price"],
+    ];
 
         // verifico si el producto que se va a agregar ya existe
         $existe = in_array("{$producto['id']}", array_column($this->carrito, 'producto_id'));
