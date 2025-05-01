@@ -125,43 +125,103 @@ class VentaCreate extends Component
         $this->carrito[$index]["total"] = $this->carrito[$index]["cantidad_detalle_venta"] * $this->carrito[$index]["precio_venta"];
     }
 
-public function agregar_item_carrito($producto)
-{
-    $item = [
-        "id" => $producto["id"], // ← Añadir ID para usar en wire:key
-        "producto_id" => $producto["id"], // se puede mantener esto si se va usar para otro lado
-        "detalle" => "{$producto["product_name"]}",
-        "product_image" => $producto["product_image"], // ← Añadir imagen
-        "cantidad_detalle_venta" => 1,
-        "precio_venta" => $producto["product_sell_price"],
-        "total" => $producto["product_sell_price"],
-    ];
-
-        // verifico si el producto que se va a agregar ya existe
+    public function agregar_item_carrito($producto, $cantidad = 1)
+    {
+        $item = [
+            "id" => $producto["id"],
+            "producto_id" => $producto["id"],
+            "detalle" => "{$producto["product_name"]}",
+            "product_image" => $producto["product_image"],
+            "cantidad_detalle_venta" => $cantidad,
+            "precio_venta" => $producto["product_sell_price"],
+            "total" => $producto["product_sell_price"] * $cantidad,
+        ];
+    
+        // Verificar si el producto ya existe en el carrito
         $existe = in_array("{$producto['id']}", array_column($this->carrito, 'producto_id'));
-
-        // si el producto no existe entonces lo agrego de lo contrario muestro un error
+    
         if (!$existe) {
-
             $stock = Producto::findOrFail($producto["id"])->product_stock;
-            if ($stock == 0) {
-            } else {
+            if ($stock >= $cantidad) {
                 array_push($this->carrito, $item);
             }
         } else {
-            #busco el index del elemento que contengo el id del producto que ando buscando
+            // Si el producto ya está en el carrito, solo actualizar la cantidad
             $index = array_search("{$producto['id']}", array_column($this->carrito, 'producto_id'));
-
-            // aumento la cantidad en 1 y el total
-            $this->carrito[$index]["cantidad_detalle_venta"] += 1;
             $stock = Producto::findOrFail($producto["id"])->product_stock;
-            if ($this->carrito[$index]["cantidad_detalle_venta"] > $stock) {
+            
+            // Asegurarse de que no se exceda el stock
+            $nueva_cantidad = $this->carrito[$index]["cantidad_detalle_venta"] + $cantidad;
+            if ($nueva_cantidad <= $stock) {
+                $this->carrito[$index]["cantidad_detalle_venta"] = $nueva_cantidad;
+                $this->carrito[$index]["total"] = $this->carrito[$index]["cantidad_detalle_venta"] * $this->carrito[$index]["precio_venta"];
+            } else {
                 $this->carrito[$index]["cantidad_detalle_venta"] = $stock;
+                $this->carrito[$index]["total"] = $stock * $this->carrito[$index]["precio_venta"];
             }
-
-            $this->carrito[$index]["total"] = $this->carrito[$index]["cantidad_detalle_venta"] * $this->carrito[$index]["precio_venta"];
         }
     }
+    
+
+public function aumentar_cantidad($producto_id, $cantidad = null)
+{
+    $index = array_search("{$producto_id}", array_column($this->carrito, 'producto_id'));
+    $stock = Producto::findOrFail($producto_id)->product_stock;
+
+    if ($index !== false) {
+        // Ya está en el carrito
+        $cantidad_actual = $this->carrito[$index]["cantidad_detalle_venta"];
+
+        if ($cantidad !== null) {
+            // Si el usuario proporcionó una cantidad específica (desde un input)
+            $nueva_cantidad = $cantidad;
+        } else {
+            // Si no, simplemente incrementamos en 1
+            $nueva_cantidad = $cantidad_actual + 1;
+        }
+
+        // Aplicar límites de stock
+        if ($nueva_cantidad > $stock) {
+            $nueva_cantidad = $stock;
+        }
+
+        $this->carrito[$index]["cantidad_detalle_venta"] = $nueva_cantidad;
+        $this->carrito[$index]["total"] = $nueva_cantidad * $this->carrito[$index]["precio_venta"];
+    } else {
+        // No está en el carrito, se agrega
+        $producto = Producto::findOrFail($producto_id);
+
+        $cantidad_a_agregar = $cantidad ?? 1; // Si no se especifica cantidad, se asume 1
+        if ($producto->product_stock >= $cantidad_a_agregar) {
+            $this->agregar_item_carrito($producto, $cantidad_a_agregar);
+        } else {
+            $this->agregar_item_carrito($producto, $producto->product_stock);
+        }
+    }
+}
+
+    
+    
+    
+    public function disminuir_cantidad($producto_id, $cantidad = 1)
+    {
+        $index = array_search("{$producto_id}", array_column($this->carrito, 'producto_id'));
+    
+        if ($index !== false) {
+            // Verificar si la cantidad a disminuir no excede la cantidad actual
+            if ($this->carrito[$index]["cantidad_detalle_venta"] > $cantidad) {
+                $this->carrito[$index]["cantidad_detalle_venta"] -= $cantidad;
+                $this->carrito[$index]["total"] = $this->carrito[$index]["cantidad_detalle_venta"] * $this->carrito[$index]["precio_venta"];
+            } else {
+                // Quitar el producto del carrito si la cantidad es 1 o menos
+                unset($this->carrito[$index]);
+                // Reindexar el array para evitar problemas con claves no consecutivas
+                $this->carrito = array_values($this->carrito);
+            }
+        }
+    }
+    
+
 
     public function guardar($pagar = false)
     {

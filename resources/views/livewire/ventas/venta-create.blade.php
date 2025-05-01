@@ -91,22 +91,15 @@
                                                                     </span>
                                                                 </div>
                                                             </div>
-
                                                             <!-- Controles +/- -->
-                                                            <div class="position-absolute" style="bottom: 0.2rem; right: 0.2rem;" x-data="{ qty: 1 }">
+                                                            <div class="position-absolute" style="bottom: 0.2rem; right: 0.2rem;">
                                                                 <div class="d-flex align-items-center bg-light px-1 py-0 rounded shadow-sm" style="height: 28px;">
-                                                                    <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-1"
-                                                                        style="font-size: 0.75rem; line-height: 1rem;"
-                                                                        @click="qty > 1 ? qty-- : qty = 1">-</button>
-                                                                    <input type="number" min="1" :max="{{ $pro->product_stock }}"
-                                                                        x-model="qty"
-                                                                        class="form-control form-control-sm text-center mx-1"
-                                                                        style="width: 35px; height: 24px; padding: 2px; font-size: 0.75rem;" />
-                                                                    <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-1"
-                                                                        style="font-size: 0.75rem; line-height: 1rem;"
-                                                                        @click="qty < {{ $pro->product_stock }} ? qty++ : qty = {{ $pro->product_stock }}">+</button>
+                                                                <input type="number" min="1"
+                                                                wire:model.lazy="carrito.{{ array_search($pro->id, array_column($carrito, 'producto_id')) }}.cantidad_detalle_venta"
+                                                                class="form-control form-control-sm text-center mx-1"
+                                                                style="width: 35px; height: 24px; padding: 2px; font-size: 0.75rem;"
+                                                                readonly>
                                                                 </div>
-                                                                <span x-effect="$wire.agregar_item_carrito({{ $pro->id }}, qty)"></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -159,23 +152,25 @@
                                                     </div>
                                                 </div>
                                             </td>
+                                        <td>  
+                                      
+                                            <div class="d-flex align-items-center bg-light px-1 py-0 rounded shadow-sm" style="height: 28px;">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-1"
+                                                    style="font-size: 0.75rem; line-height: 1rem;"
+                                                    wire:click="disminuir_cantidad({{ $item['producto_id'] }})">-</button>
 
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                <div class="d-flex align-items-center">
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary d-none"
-                                                        wire:click="actualizar_total({{ $item['cantidad_detalle_venta'] - 1 }}, {{ $index }})"
-                                                        @if($item['cantidad_detalle_venta'] <= 1) disabled @endif>-</button>
+                                                <input type="number" min="1"
+                                                    wire:model.lazy="carrito.{{ $index }}.cantidad_detalle_venta"
+                                                    wire:change="actualizar_total($event.target.value, {{ $index }})"
+                                                    class="form-control form-control-sm text-center mx-1"
+                                                    style="width: 35px; height: 24px; padding: 2px; font-size: 0.75rem;" />
 
-                                                    <input type="number" min="1" value="{{ $item['cantidad_detalle_venta'] }}"
-                                                        wire:change="actualizar_total($event.target.value, {{ $index }})"
-                                                        class="form-control form-control-sm mx-1 text-center" style="width: 50px;" />
-
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary d-none"
-                                                        wire:click="actualizar_total({{ $item['cantidad_detalle_venta'] + 1 }}, {{ $index }})">+</button>
-                                                </div>
-
-                                            </td>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-1"
+                                                    style="font-size: 0.75rem; line-height: 1rem;"
+                                                    wire:click="aumentar_cantidad({{ $item['producto_id'] }})">+</button>
+                                            </div>
+                                       
+                                        </td>
 
                                             <td>
                                             <a class="text-danger" style="cursor: pointer; display: flex; align-items: center; justify-content: center;"
