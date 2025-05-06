@@ -6,6 +6,7 @@ use App\Models\Compra;
 use App\Models\DetalleCompra;
 use App\Models\Producto;
 use App\Models\Proveedor;
+use App\Models\Settings;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\Compras\StoreRequest;
@@ -181,9 +182,10 @@ class CompraClienteController extends Controller
     {
         $fecha = $request->query('fecha');
         $compras = Compra::whereDate('purchase_date', $fecha)->get();
+        $setting = Settings::first();
 
         // Ruta imagen logo (el reporte no muestra la imagen con Storage::url ni asset())
-        $imagePath = storage_path('app/public/images/resources/report_logo.png'); // Ruta al archivo
+        $imagePath = storage_path('app/public/sys_config/img/' . $setting->system_logo_report); // Ruta al archivo
         $imageData = base64_encode(File::get($imagePath)); // Codificar la imagen a Base64
         $image_logo = 'data:image/png;base64,' . $imageData; // Crear la cadena Base64
 
@@ -225,8 +227,11 @@ class CompraClienteController extends Controller
     // Cierre de caja mensual
     public function generarFacturaMesActual(Request $request)
     {
+   
+        $setting = Settings::first();
+
         // Ruta imagen logo (el reporte no muestra la imagen con Storage::url ni asset())
-        $imagePath = storage_path('app/public/images/resources/report_logo.png'); // Ruta al archivo
+        $imagePath = storage_path('app/public/sys_config/img/' . $setting->system_logo_report); // Ruta al archivo
         $imageData = base64_encode(File::get($imagePath)); // Codificar la imagen a Base64
         $image_logo = 'data:image/png;base64,' . $imageData; // Crear la cadena Base64
 

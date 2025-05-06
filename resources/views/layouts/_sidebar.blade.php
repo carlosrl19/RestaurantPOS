@@ -34,23 +34,20 @@
     </li>
     @endcan
 
-    @can('sidebar_products')
-    <!-- Divider -->
-    <hr class="sidebar-divider bg-white" style="margin-top: 1rem">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        MODULO DE PRODUCTOS
+<li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProductos"
+        aria-expanded="false" aria-controls="collapseProductos">
+        <x-heroicon-o-square-3-stack-3d class="text-white" style="width: 20px; height: 20px;" />&nbsp;
+        <span class="text-white">Productos</span>
+    </a>
+    <div id="collapseProductos" class="collapse" aria-labelledby="headingProductos" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+        <a class="collapse-item" href="{{ route('productos.index') }}">Lista De Productos</a>
+        <a class="collapse-item" href="{{ route('categorias.index') }}">Lista De Categorias</a>
+        </div>
     </div>
+</li>
 
-    <!-- Nav Item - Productos -->
-    <li class="nav-item">
-        <a class="nav-link text-white" href="{{route('productos.index')}}">
-            <x-heroicon-o-square-3-stack-3d class="text-white" style="width: 20px; height: 20px;" />&nbsp;
-            <span>Productos</span>
-        </a>
-    </li>
-    @endcan
 
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
@@ -114,4 +111,5 @@
         </a>
     </li>
     @endcan
+    
 </ul>

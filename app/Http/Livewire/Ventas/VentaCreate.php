@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Ventas;
 
+use App\Models\Categoria;
 use App\Models\DetalleVenta;
 use App\Models\Producto;
 use App\Models\User;
@@ -18,6 +19,14 @@ class VentaCreate extends Component
     public $filtro_producto = "";
     public $venta;
     public $editar = false;
+    public $categoriaSeleccionada = null;
+
+    public function filtrarPorCategoria($categoriaId)
+{
+    $this->categoriaSeleccionada = $categoriaId;
+}
+
+
 
     public $data = [
         "sale_invoice_number" => "Nuevo",
@@ -47,15 +56,31 @@ class VentaCreate extends Component
     public function render()
     {
         $this->data["sale_invoice_client_type"] = "consumidor_final";
-
+        
+        // Obtener las categorías
+        $categorias = Categoria::all(); // Esto carga todas las categorías
+    
+        // Construcción de la consulta para productos filtrados por categoría y nombre de producto
+        $query = Producto::query();
+        
+        if ($this->categoriaSeleccionada !== null) {
+            $query->where('categoria_id', $this->categoriaSeleccionada);
+        }
+        
+        if ($this->filtro_producto) {
+            $query->where("product_name", "like", "%{$this->filtro_producto}%");
+        }
+        
         return view('livewire.ventas.venta-create', [
-            "productos" => Producto::where("product_name", "like", "%{$this->filtro_producto}%")
-                ->orWhere("product_barcode", "like", "%{$this->filtro_producto}%")
-                ->paginate(18)
+            'productos' => $query->paginate(18),
+            'categorias' => $categorias, // Pasa las categorías a la vista
         ])
-            ->extends('layouts.layouts')
-            ->section('content');
+        ->extends('layouts.layouts')
+        ->section('content');
+        
     }
+    
+    
 
     public function mount($id = null)
     {
@@ -307,4 +332,11 @@ public function aumentar_cantidad($producto_id, $cantidad = null)
     {
         $this->resetPage(); 
     }
+    
+    public function cargarCategorias()
+{
+    // Recarga las categorías
+    $this->categorias = Categoria::all();
+}
+
 }

@@ -21,10 +21,11 @@ class VentaClienteController extends Controller
     public function generarFacturaPorFecha(Request $request)
     {
         $fecha = $request->query('fecha');
+        $setting = Settings::first();
         $ventas = Venta::whereDate('sale_invoice_date', $fecha)->get();
 
         // Ruta imagen logo (el reporte no muestra la imagen con Storage::url ni asset())
-        $imagePath = storage_path('app/public/images/resources/report_logo.png'); // Ruta al archivo
+        $imagePath = storage_path('app/public/sys_config/img/' . $setting->system_logo_report); // Ruta al archivo
         $imageData = base64_encode(File::get($imagePath)); // Codificar la imagen a Base64
         $image_logo = 'data:image/png;base64,' . $imageData; // Crear la cadena Base64
 
@@ -66,8 +67,9 @@ class VentaClienteController extends Controller
     // Cierre de caja mensual
     public function generarFacturaMesActual(Request $request)
     {
+        $setting = Settings::first();
         // Ruta imagen logo (el reporte no muestra la imagen con Storage::url ni asset())
-        $imagePath = storage_path('app/public/images/resources/report_logo.png'); // Ruta al archivo
+        $imagePath = storage_path('app/public/sys_config/img/' . $setting->system_logo_report); // Ruta al archivo
         $imageData = base64_encode(File::get($imagePath)); // Codificar la imagen a Base64
         $image_logo = 'data:image/png;base64,' . $imageData; // Crear la cadena Base64
 

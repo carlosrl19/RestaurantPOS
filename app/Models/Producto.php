@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Producto extends Model
 {
     protected $fillable = [
+        'categoria_id',
         'product_barcode',
         'product_name',
         'product_description',
@@ -34,5 +35,8 @@ class Producto extends Model
     public function clientTreatments()
     {
         return $this->belongsToMany(ClientTreatments::class, 'product_id');
+    }
+    public function categoria(){
+        return $this->belongsTo(Categoria::class, 'categoria_id');
     }
 }

@@ -32,7 +32,7 @@
 <div class="mb-4">
     <div class="card m-2">
         <div class="card-header bg-gray-700 text-white">
-            LISTADO PRINCIPAL DE PRODUCTOS
+            LISTADO PRINCIPAL DE PRODUCTOS 
         </div>
         <div class="card-body m-2">
             <div class="col-12 mb-2" style="background-color: rgba(0, 0, 0, 0.05); padding: 10px; text-align: center">
@@ -49,6 +49,7 @@
                 <thead>
                     <tr class="text-center text-white" style="background-color: #4e73df;">
                         <th>Producto</th>
+                        <th>Categoría</th>
                         <th>Código barra</th>
                         <th>Existencia</th>
                         <th>Precio compra</th>
@@ -70,6 +71,11 @@
                                 </a>
                             </strong>
                         </td>
+
+                        <td>
+                            {{ $producto->categoria->nombre_Categoria ?? 'Sin categoría' }}
+                        </td>
+
                         <td style="width: 8rem; max-width: 8rem; text-transform: uppercase">
                             @if($producto->product_barcode == '')
                             <span class="badge bg-dark text-white">SIN CODIGO</span>

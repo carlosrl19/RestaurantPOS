@@ -60,6 +60,24 @@
                                     </div>
                                 </div>
 
+                                <div class="mb-3 form-floating">
+                                    <select class="form-select @error('categoria_id') is-invalid @enderror"
+                                            id="categoria_id" name="categoria_id" required>
+                                        <option value="" disabled>Seleccione categoría</option>
+                                        @foreach ($categorias as $categoria)
+                                        <option value="{{ $categoria->id }}"
+                                            {{ $producto->categoria_id == $categoria->id ? 'selected' : '' }}>
+                                            {{ $categoria->nombre_Categoria }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    <label for="categoria_id">Categoría <span class="text-danger">*</span></label>
+                                    @error('categoria_id')
+                                        <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
+                                    @enderror
+                                </div>
+
+
                                 <!-- Price inputs -->
                                 <div class="row mb-3">
                                     <div class="col-sm-6 mb-3 mb-sm-0">

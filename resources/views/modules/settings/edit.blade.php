@@ -152,7 +152,8 @@
                                     <div class="col">
                                         <div class="row mb-3">
                                             <div class="col-md-6 text-center">
-                                                <img class="mb-3" style="margin: auto" id="logoPreviewOld" width="100" height="100" src="{{ Storage::url('sys_config/img/' . $setting->logo_company) }}"><br>
+                                                <img class="mb-3" style="margin: auto" id="logoPreviewOld" width="100" height="100" 
+                                                    src="{{ asset('storage/sys_config/img/' . $setting->system_logo_report) }}"><br>
                                                 <label for="logoPreviewOld">Imagen actual</label>
                                             </div>
                                             <div class="col-md-6 text-center">
@@ -214,7 +215,7 @@
 
                         <div class="row">
                             <div class="col-sm-12">
-                                <a data-dismiss="modal" class="btn btn-sm btn-dark">
+                            <a href="javascript:history.back()" class="btn btn-sm btn-dark">
                                     Regresar
                                 </a>
                                 <button type="submit" class="btn btn-sm btn-primary">

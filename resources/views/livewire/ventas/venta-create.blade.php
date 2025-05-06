@@ -39,32 +39,16 @@
                                 <input type="text" autocomplete="off" oninput="this.value = this.value.toUpperCase()" name="buscar_producto" id="buscar_producto" wire:model.debounce.500ms="filtro_producto" class="form-control border-1 small" placeholder="Buscar producto..." autocomplete="off" aria-label="Search" aria-describedby="basic-addon2">
                             </div>
                             <div class="mb-2 d-flex flex-wrap gap-2">
-                                <button class="btn btn-sm btn-outline-secondary">
-                                    <i class="fas fa-th-large"></i> All
+                                <button type="button" class="btn btn-sm btn-outline-secondary" wire:click="filtrarPorCategoria(null)">
+                                    Todos
                                 </button>
-                                <button class="btn btn-sm btn-outline-secondary">
-                                    <i class="fas fa-coffee"></i> Desayuno
-                                </button>
-                                <button class="btn btn-sm btn-outline-secondary">
-                                    <i class="fas fa-utensils"></i> Almuerzo
-                                </button>
-                                <button class="btn btn-sm btn-outline-secondary">
-                                    <i class="fas fa-drumstick-bite"></i> Cena
-                                </button>
-                                <button class="btn btn-sm btn-outline-secondary">
-                                    <i class="fas fa-ice-cream"></i> Postre
-                                </button>
-                                <button class="btn btn-sm btn-outline-secondary">
-                                    <i class="fas fa-glass-cheers"></i> Bebidas gaseosas
-                                </button>
-                                <button class="btn btn-sm btn-outline-secondary">
-                                    <i class="fas fa-wine-glass-alt"></i> Bebidas alcohólicas
-                                </button>
-                            </div>
-                            <div class="d-flex mb-2 p-2 justify-content-center" style="background-color: rgba(0,0,0,0.05);">
-                                {{ $productos->links() }}
-                            </div>
 
+                                @foreach ($categorias as $categoria)
+                                <button type="button" class="btn btn-sm btn-outline-secondary" wire:click="filtrarPorCategoria({{ $categoria->id }})">
+                                    {{ $categoria->nombre_Categoria }} <!-- Nombre de la categoría que se crea -->
+                                </button>
+                            @endforeach
+                            </div>
                             <div class="card-body">
                                 <div class="row" style="overflow: auto;">
                                     <section class="w-100">
@@ -91,13 +75,13 @@
                                                                     </span>
                                                                 </div>
                                                             </div>
-                                                            <!-- Controles +/- -->
+                                                            <!-- caja numerica -->
                                                             <div class="position-absolute" style="bottom: 0.2rem; right: 0.2rem;">
                                                                 <div class="d-flex align-items-center bg-light px-1 py-0 rounded shadow-sm" style="height: 28px;">
                                                                 <input type="number" min="1"
                                                                 wire:model.lazy="carrito.{{ array_search($pro->id, array_column($carrito, 'producto_id')) }}.cantidad_detalle_venta"
                                                                 class="form-control form-control-sm text-center mx-1"
-                                                                style="width: 35px; height: 24px; padding: 2px; font-size: 0.75rem;"
+                                                                style="width: 35px; height: 24px; padding: 2px; font-size: 0.75rem; -moz-appearance: textfield;-webkit-appearance: none;appearance: textfield;"
                                                                 readonly>
                                                                 </div>
                                                             </div>
@@ -163,7 +147,7 @@
                                                     wire:model.lazy="carrito.{{ $index }}.cantidad_detalle_venta"
                                                     wire:change="actualizar_total($event.target.value, {{ $index }})"
                                                     class="form-control form-control-sm text-center mx-1"
-                                                    style="width: 35px; height: 24px; padding: 2px; font-size: 0.75rem;" />
+                                                    style="width: 35px; height: 24px; padding: 2px; font-size: 0.75rem; -moz-appearance: textfield;-webkit-appearance: none;appearance: textfield;" />
 
                                                 <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-1"
                                                     style="font-size: 0.75rem; line-height: 1rem;"

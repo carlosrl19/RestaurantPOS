@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CategoriaController;
+
 
 use App\Http\Livewire\Compras\ComprasShow;
 use App\Http\Livewire\Ventas\VentaCreate;
@@ -103,4 +105,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     /* Settings */
     Route::resource('/settings', App\Http\Controllers\SettingsController::class)->names('settings');
+
+    Route::resource('/categories', 'App\Http\Controllers\CategoriaController')->names('categorias');
+    Route::put('/categorias/{categoria}', [CategoriaController::class, 'update'])->name('categorias.update');
+
+    Route::delete('/categories/{id}', 'App\Http\Controllers\CategoriaController@destroy')
+    ->name('categorias.destroy')
+    ->where('id', '[0-9]+');
+
+
 });
