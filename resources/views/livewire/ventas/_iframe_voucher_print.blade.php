@@ -13,3 +13,6 @@
         </div>
     </div>
 </div>
+
+<!-- Iframe oculto para impresión automática -->
+<iframe id="hidden-print-frame" style="display:none;"></iframe>

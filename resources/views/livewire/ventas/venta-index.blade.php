@@ -8,7 +8,7 @@
     <ol class="breadcrumb" style="font-size: clamp(0.6rem, 3.2vw, 0.8rem)">
         <li class="breadcrumb-item text-secondary"><i class="fas fa-home"></i></li>
         <li class="breadcrumb-item text-secondary"><strong>Ventas</strong></li>
-        <li class="breadcrumb-item active d-none d-lg-block d-md-block"">Listado principal de ventas</li>
+        <li class="breadcrumb-item active d-none d-lg-block d-md-block">Listado principal de ventas</li>
     </ol>
 </nav>
 @endsection
@@ -59,13 +59,9 @@
                                 @endif
                             </td>
                             <td>
-                                @can('details_sales')
-                                <a href="#" data-toggle="modal" data-target="#sell_details{{ $venta->id }}">{{ $venta->sale_invoice_number }}</a>
-                                @else
                                 <strong>
                                     {{ $venta->sale_invoice_number }}
                                 </strong>
-                                @endcan
                             </td>
                             <td>
                                 <div class="badge bg-success">
@@ -74,7 +70,7 @@
                             </td>
                             <td>{{ $venta->user->name }}</td>
                             <td>
-                                <a href="{{ route('ventas.voucher_print', $venta->id) }}" data-toggle="modal" data-target="#voucher_print" class="btn btn-sm btn-secondary">
+                                <a href="" data-toggle="modal" data-target="#voucher_print" class="btn btn-sm btn-secondary">
                                     <x-heroicon-o-printer style="width: 20px; height: 20px;" class="text-white" />
                                 </a>
                             </td>

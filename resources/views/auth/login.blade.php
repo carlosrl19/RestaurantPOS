@@ -18,11 +18,15 @@
                         <div class="col-lg-6">
                             <div class="p-5">
                                 <div class="text-center">
-                                    <h1 class="h4 text-gray-900 mb-4">Iniciar sesión</h1>
+                                    <h1 style="text-decoration: underline;" class="h5 mb-4"><strong>{{ config('app.name') }}</strong></h1>
+                                </div>
+                                <div class="text-center">
+                                    <h1 class="h5 text-gray-900 mb-4">Iniciar sesión</h1>
                                 </div>
                                 <form class="user" method="POST" action="{{ route('login') }}">
                                     @csrf
                                     <div class="form-group">
+                                        <p>Correo:</p>
                                         <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
                                         @error('email')
                                         <span class="invalid-feedback" role="alert">
@@ -32,6 +36,7 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <p>Contraseña:</p>
                                         <div class="input-group">
                                             <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
                                             <div class="input-group-append">
@@ -51,8 +56,6 @@
                                         <button type="submit" class="btn btn-primary btn-user btn-block" style="display: inline-block; background: #0d6efd; color: white; border: 2px solid #ffffff;border-radius: 10px; font-size: large"> Ingresar </button>
                                     </div>
                                 </form>
-                                <hr>
-                                <p id="texto_motivacional" style="color:rgb(43, 43, 43); text-align: center; font-size: 1.1rem"></p>
                             </div>
                         </div>
                     </div>
@@ -87,5 +90,4 @@
 
 @push('scripts')
 <script src="{{ asset('js/custom_scripts/show_pass.js') }}"></script>
-<script src="{{ asset('js/custom_scripts/phrases.js') }}"></script>
 @endpush

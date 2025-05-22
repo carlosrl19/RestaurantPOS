@@ -42,8 +42,8 @@
     </a>
     <div id="collapseProductos" class="collapse" aria-labelledby="headingProductos" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-        <a class="collapse-item" href="{{ route('productos.index') }}">Lista De Productos</a>
-        <a class="collapse-item" href="{{ route('categorias.index') }}">Lista De Categorias</a>
+        <a class="collapse-item" href="{{ route('productos.index') }}">Lista de productos</a>
+        <a class="collapse-item" href="{{ route('categorias.index') }}">Lista de categorias</a>
         </div>
     </div>
 </li>

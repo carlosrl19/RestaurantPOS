@@ -17,7 +17,7 @@
                             </div>
 
                             <div class="card-footer">
-                                <button style="display: flex; margin: auto; font-size: clamp(0.8rem, 3vw, 0.9rem);" type="button" class="btn btn-sm btn-danger fw-bold" id="cierre_diario_btn" data-toggle="modal" data-target="#cierre_diario_modal">
+                                <button data-dismiss="modal" style="display: flex; margin: auto; font-size: clamp(0.8rem, 3vw, 0.9rem);" type="button" class="btn btn-sm btn-danger fw-bold" id="cierre_diario_btn" data-toggle="modal" data-target="#cierre_diario_modal">
                                     Exportar cierre diario
                                 </button>
                             </div>
@@ -62,7 +62,7 @@
                             </div>
 
                             <div class="card-footer">
-                                <button style="display: flex; margin: auto; font-size: clamp(0.8rem, 3vw, 0.9rem);" type="button" class="btn btn-sm btn-danger fw-bold" id="cerrarCajaMensualBtn" onclick="exportarPDF()">
+                                <button data-dismiss="modal" style="display: flex; margin: auto; font-size: clamp(0.8rem, 3vw, 0.9rem);" type="button" class="btn btn-sm btn-danger fw-bold" id="cerrarCajaMensualBtn" onclick="exportarPDF()">
                                     Exportar cierre mensual
                                 </button>
                             </div>

@@ -22,9 +22,9 @@ class VentaCreate extends Component
     public $categoriaSeleccionada = null;
 
     public function filtrarPorCategoria($categoriaId)
-{
-    $this->categoriaSeleccionada = $categoriaId;
-}
+    {
+        $this->categoriaSeleccionada = $categoriaId;
+    }
 
 
 
@@ -56,31 +56,30 @@ class VentaCreate extends Component
     public function render()
     {
         $this->data["sale_invoice_client_type"] = "consumidor_final";
-        
+
         // Obtener las categorías
         $categorias = Categoria::all(); // Esto carga todas las categorías
-    
+
         // Construcción de la consulta para productos filtrados por categoría y nombre de producto
         $query = Producto::query();
-        
+
         if ($this->categoriaSeleccionada !== null) {
             $query->where('categoria_id', $this->categoriaSeleccionada);
         }
-        
+
         if ($this->filtro_producto) {
             $query->where("product_name", "like", "%{$this->filtro_producto}%");
         }
-        
+
         return view('livewire.ventas.venta-create', [
             'productos' => $query->paginate(18),
             'categorias' => $categorias, // Pasa las categorías a la vista
         ])
-        ->extends('layouts.layouts')
-        ->section('content');
-        
+            ->extends('layouts.layouts')
+            ->section('content');
     }
-    
-    
+
+
 
     public function mount($id = null)
     {
@@ -161,10 +160,10 @@ class VentaCreate extends Component
             "precio_venta" => $producto["product_sell_price"],
             "total" => $producto["product_sell_price"] * $cantidad,
         ];
-    
+
         // Verificar si el producto ya existe en el carrito
         $existe = in_array("{$producto['id']}", array_column($this->carrito, 'producto_id'));
-    
+
         if (!$existe) {
             $stock = Producto::findOrFail($producto["id"])->product_stock;
             if ($stock >= $cantidad) {
@@ -174,7 +173,7 @@ class VentaCreate extends Component
             // Si el producto ya está en el carrito, solo actualizar la cantidad
             $index = array_search("{$producto['id']}", array_column($this->carrito, 'producto_id'));
             $stock = Producto::findOrFail($producto["id"])->product_stock;
-            
+
             // Asegurarse de que no se exceda el stock
             $nueva_cantidad = $this->carrito[$index]["cantidad_detalle_venta"] + $cantidad;
             if ($nueva_cantidad <= $stock) {
@@ -186,52 +185,52 @@ class VentaCreate extends Component
             }
         }
     }
-    
 
-public function aumentar_cantidad($producto_id, $cantidad = null)
-{
-    $index = array_search("{$producto_id}", array_column($this->carrito, 'producto_id'));
-    $stock = Producto::findOrFail($producto_id)->product_stock;
 
-    if ($index !== false) {
-        // Ya está en el carrito
-        $cantidad_actual = $this->carrito[$index]["cantidad_detalle_venta"];
+    public function aumentar_cantidad($producto_id, $cantidad = null)
+    {
+        $index = array_search("{$producto_id}", array_column($this->carrito, 'producto_id'));
+        $stock = Producto::findOrFail($producto_id)->product_stock;
 
-        if ($cantidad !== null) {
-            // Si el usuario proporcionó una cantidad específica (desde un input)
-            $nueva_cantidad = $cantidad;
+        if ($index !== false) {
+            // Ya está en el carrito
+            $cantidad_actual = $this->carrito[$index]["cantidad_detalle_venta"];
+
+            if ($cantidad !== null) {
+                // Si el usuario proporcionó una cantidad específica (desde un input)
+                $nueva_cantidad = $cantidad;
+            } else {
+                // Si no, simplemente incrementamos en 1
+                $nueva_cantidad = $cantidad_actual + 1;
+            }
+
+            // Aplicar límites de stock
+            if ($nueva_cantidad > $stock) {
+                $nueva_cantidad = $stock;
+            }
+
+            $this->carrito[$index]["cantidad_detalle_venta"] = $nueva_cantidad;
+            $this->carrito[$index]["total"] = $nueva_cantidad * $this->carrito[$index]["precio_venta"];
         } else {
-            // Si no, simplemente incrementamos en 1
-            $nueva_cantidad = $cantidad_actual + 1;
-        }
+            // No está en el carrito, se agrega
+            $producto = Producto::findOrFail($producto_id);
 
-        // Aplicar límites de stock
-        if ($nueva_cantidad > $stock) {
-            $nueva_cantidad = $stock;
-        }
-
-        $this->carrito[$index]["cantidad_detalle_venta"] = $nueva_cantidad;
-        $this->carrito[$index]["total"] = $nueva_cantidad * $this->carrito[$index]["precio_venta"];
-    } else {
-        // No está en el carrito, se agrega
-        $producto = Producto::findOrFail($producto_id);
-
-        $cantidad_a_agregar = $cantidad ?? 1; // Si no se especifica cantidad, se asume 1
-        if ($producto->product_stock >= $cantidad_a_agregar) {
-            $this->agregar_item_carrito($producto, $cantidad_a_agregar);
-        } else {
-            $this->agregar_item_carrito($producto, $producto->product_stock);
+            $cantidad_a_agregar = $cantidad ?? 1; // Si no se especifica cantidad, se asume 1
+            if ($producto->product_stock >= $cantidad_a_agregar) {
+                $this->agregar_item_carrito($producto, $cantidad_a_agregar);
+            } else {
+                $this->agregar_item_carrito($producto, $producto->product_stock);
+            }
         }
     }
-}
 
-    
-    
-    
+
+
+
     public function disminuir_cantidad($producto_id, $cantidad = 1)
     {
         $index = array_search("{$producto_id}", array_column($this->carrito, 'producto_id'));
-    
+
         if ($index !== false) {
             // Verificar si la cantidad a disminuir no excede la cantidad actual
             if ($this->carrito[$index]["cantidad_detalle_venta"] > $cantidad) {
@@ -245,7 +244,7 @@ public function aumentar_cantidad($producto_id, $cantidad = null)
             }
         }
     }
-    
+
 
 
     public function guardar($pagar = false)
@@ -289,7 +288,9 @@ public function aumentar_cantidad($producto_id, $cantidad = null)
                 $venta->save();
             }
 
-            return redirect()->route('ventas.create')->with('success', 'La venta fue registrada exitosamente.');
+            return redirect()->route('ventas.create')
+                ->with('success', 'La venta fue registrada exitosamente.')
+                ->with('nueva_venta_id', $venta->id);
         } else {
             $this->venta->sale_invoice_number = $pagar == true ? $this->generar_numero_factura() : $this->data["sale_invoice_number"];
             $this->venta->sale_invoice_date = $this->data["sale_invoice_date"];
@@ -313,7 +314,9 @@ public function aumentar_cantidad($producto_id, $cantidad = null)
                 $detalle_venta->save();
             }
 
-            return redirect()->route('ventas.index')->with('success', '¡Venta editada con éxito!');
+            return redirect()->route('ventas.index')
+                ->with('success', '¡Venta editada con éxito!')
+                ->with('nueva_venta_id', $this->venta->id);
         }
     }
 
@@ -330,13 +333,12 @@ public function aumentar_cantidad($producto_id, $cantidad = null)
     // Esto en Livewire siempre es igual, es decir, updated[nombrePropiedad], se le conoce como lifecycle hooks
     public function updatedFiltroProducto()
     {
-        $this->resetPage(); 
+        $this->resetPage();
     }
-    
-    public function cargarCategorias()
-{
-    // Recarga las categorías
-    $this->categorias = Categoria::all();
-}
 
+    public function cargarCategorias()
+    {
+        // Recarga las categorías
+        $this->categorias = Categoria::all();
+    }
 }

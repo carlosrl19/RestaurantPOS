@@ -27,6 +27,49 @@
     </div>
 
     <div class="content-wrapper">
+        @if(session('nueva_venta_id'))
+        <div class="modal fade" id="imprimirModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Venta completada</h5>
+                    </div>
+                    <div class="modal-body">
+                        ¿Desea imprimir el recibo de la venta?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="imprimirRecibo({{ session('nueva_venta_id') }})">Sí, imprimir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Iframe oculto para la impresión -->
+        <iframe id="pdfFrame" style="display: none;"></iframe>
+
+        <script>
+            // Mostrar modal automáticamente cuando hay una nueva venta
+            document.addEventListener('DOMContentLoaded', function() {
+                var imprimirModal = new bootstrap.Modal(document.getElementById('imprimirModal'));
+                imprimirModal.show();
+            });
+
+            function imprimirRecibo(ventaId) {
+                var iframe = document.getElementById('pdfFrame');
+                iframe.src = '/ventas/voucher/' + ventaId + '/imprimir/';
+
+                iframe.onload = function() {
+                    try {
+                        iframe.contentWindow.print();
+                    } catch (e) {
+                        console.error('Error al imprimir:', e);
+                    }
+                };
+            }
+        </script>
+        @endif
+
         <form>
             @csrf
             <div class="row">
@@ -38,62 +81,69 @@
                                 <button class="btn btn-sm btn-danger" style="margin-right: 5px;" type="button" disabled><i class="fas fa-search"></i></button>
                                 <input type="text" autocomplete="off" oninput="this.value = this.value.toUpperCase()" name="buscar_producto" id="buscar_producto" wire:model.debounce.500ms="filtro_producto" class="form-control border-1 small" placeholder="Buscar producto..." autocomplete="off" aria-label="Search" aria-describedby="basic-addon2">
                             </div>
-                            <div class="mb-2 d-flex flex-wrap gap-2">
-                                <button type="button" class="btn btn-sm btn-outline-secondary" wire:click="filtrarPorCategoria(null)">
+                            <div class="mb-2 mt-3 d-flex flex-wrap gap-2">
+                                <button
+                                    type="button"
+                                    class="btn btn-sm {{ is_null($categoriaSeleccionada) ? 'btn-outline-danger' : 'btn-outline-secondary' }}"
+                                    wire:click="filtrarPorCategoria(null)">
                                     Todos
                                 </button>
 
-                                @foreach ($categorias as $categoria)
-                                <button type="button" class="btn btn-sm btn-outline-secondary" wire:click="filtrarPorCategoria({{ $categoria->id }})">
-                                    {{ $categoria->nombre_Categoria }} <!-- Nombre de la categoría que se crea -->
+                                @foreach ($categorias->whereIn('id', $productos->pluck('categoria_id')->unique()) as $categoria)
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-secondary {{ $categoriaSeleccionada == $categoria->id ? 'bg-primary text-white b-0' : '' }}"
+                                    wire:click="filtrarPorCategoria({{ $categoria->id }})">
+                                    {{ $categoria->category_name }}
                                 </button>
-                            @endforeach
+                                @endforeach
                             </div>
                             <div class="card-body">
                                 <div class="row" style="overflow: auto;">
                                     <section class="w-100">
                                         <div class="producto" id="producto" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
                                             @if(count($productos) > 0)
-                                                @foreach($productos as $pro)
-                                                    <div class="agregar-factura" style="width: 100%; height: 220px; padding: 0; margin: 0;">
-                                                        <div class="card h-100 position-relative" style="background-color: {{ $pro->product_stock == 0 ? '#ff5a5a' : 'inherit' }}; opacity: {{ $pro->product_stock == 0 ? '0.5' : '1' }}; overflow: hidden;">
-                                                            <div class="btn w-100 h-100 d-flex flex-column align-items-center justify-content-start position-relative"
-                                                                data-id="{{ $pro->id }}" data-codigo="{{ $pro->product_barcode }}"
-                                                                wire:click="agregar_item_carrito({{ $pro }})"
-                                                                style="padding: 4px;">
-                                                                <img class="card-img-top"
-                                                                    style="object-fit: cover; height: 130px; width: 120px;"
-                                                                    src="{{ $pro->product_image ? asset('storage/images/products/' . $pro->product_image) : asset('storage/images/resources/no_image_available.png') }}"
-                                                                    title="{{ $pro->product_name }} {{ $pro->modelo }}" loading="lazy" />
-                                                                <div class="position-absolute bottom-0 start-0 m-1 text-start">
-                                                                    <p class="nombre mb-0 {{ $pro->product_stock == 0 ? 'text-white' : 'text-secondary' }}"
-                                                                        style="width: 130px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.75rem;">
-                                                                        <strong>{{ $pro->product_name }}</strong>
-                                                                    </p>
-                                                                    <span class="{{ $pro->product_stock == 0 ? 'text-white' : 'text-muted' }}">
-                                                                        <strong style="font-size: 10px;">L.{{ number_format($pro->product_sell_price, 2, '.', ',') }}</strong>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                            <!-- caja numerica -->
-                                                            <div class="position-absolute" style="bottom: 0.2rem; right: 0.2rem;">
-                                                                <div class="d-flex align-items-center bg-light px-1 py-0 rounded shadow-sm" style="height: 28px;">
-                                                                <input type="number" min="1"
+                                            @foreach($productos as $pro)
+                                            <div class="agregar-factura" style="width: 100%; height: 220px; padding: 0; margin: 0;">
+                                                <div class="card h-100 position-relative" style="background-color: {{ $pro->product_stock == 0 ? '#ff5a5a' : 'inherit' }}; opacity: {{ $pro->product_stock == 0 ? '0.5' : '1' }}; overflow: hidden;">
+                                                    <div class="btn w-100 h-100 d-flex flex-column align-items-center justify-content-start position-relative"
+                                                        data-id="{{ $pro->id }}" data-codigo="{{ $pro->product_barcode }}"
+                                                        wire:click="agregar_item_carrito({{ $pro }})"
+                                                        style="padding: 4px;">
+                                                        <img class="card-img-top"
+                                                            style="object-fit: cover; height: 130px; width: 120px;"
+                                                            src="{{ $pro->product_image ? asset('storage/images/products/' . $pro->product_image) : asset('storage/images/resources/no_image_available.png') }}"
+                                                            title="{{ $pro->product_name }} {{ $pro->modelo }}" loading="lazy" />
+                                                        <div class="position-absolute bottom-0 start-0 m-1 text-start">
+                                                            <p class="nombre mb-0 {{ $pro->product_stock == 0 ? 'text-white' : 'text-secondary' }}"
+                                                                style="width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.75rem;">
+                                                                <strong>{{ $pro->product_name }}</strong> @if($pro->product_barcode)<span style="opacity: 0.4;">({{ $pro->product_barcode }})</span> @endif
+                                                            </p>
+                                                            <span class="{{ $pro->product_stock == 0 ? 'text-white' : 'text-muted' }}">
+                                                                <strong style="font-size: 10px;">L.{{ number_format($pro->product_sell_price, 2, '.', ',') }}</strong>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <!-- caja numerica -->
+                                                    <div class="position-absolute" style="bottom: 0.2rem; right: 0.2rem;">
+                                                        <div class="d-flex align-items-center bg-light px-1 py-0 rounded shadow-sm" style="height: 28px;">
+                                                            <input type="number" min="1"
                                                                 wire:model.lazy="carrito.{{ array_search($pro->id, array_column($carrito, 'producto_id')) }}.cantidad_detalle_venta"
                                                                 class="form-control form-control-sm text-center mx-1"
                                                                 style="width: 35px; height: 24px; padding: 2px; font-size: 0.75rem; -moz-appearance: textfield;-webkit-appearance: none;appearance: textfield;"
                                                                 readonly>
-                                                                </div>
-                                                            </div>
                                                         </div>
                                                     </div>
-                                                @endforeach
-                                            @else
-                                                <div class="alert alert-danger" role="alert">
-                                                    <x-heroicon-o-circle-stack style="width: 20px; height: 20px;" class="text-danger" />
-                                                    &nbsp;
-                                                    <span style="font-size: clamp(0.7rem, 6vw, 0.8rem)">Sin productos que coincidan con la búsqueda.</span>
                                                 </div>
+                                            </div>
+                                            @endforeach
+                                            @else
+                                            <div class="alert alert-danger" role="alert" style="grid-column: 1 / -1;">
+                                                <x-heroicon-o-circle-stack style="width: 20px; height: 20px;" class="text-danger" />
+                                                &nbsp;
+                                                <span style="font-size: clamp(0.7rem, 6vw, 0.8rem)">Sin productos existentes / que coincidan con la búsqueda.</span>
+                                            </div>
                                             @endif
                                         </div>
                                     </section>
@@ -119,12 +169,12 @@
                                     </thead>
                                     <tbody style="font-size: clamp(0.8rem, 3vw, 0.9rem);">
                                         @forelse ($carrito as $index => $item)
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex align-items-center gap-2">
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
                                                     <div wire:key="product-{{ $item['id'] }}">
                                                         <img class="card-img-top"
-                                                            style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px;" 
+                                                            style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px;"
                                                             src="{{ $item['product_image'] ? asset('storage/images/products/' . $item['product_image']) : asset('storage/images/resources/no_image_available.png') }}"
                                                             title="{{ $item['detalle'] }}"
                                                             loading="lazy" />
@@ -136,58 +186,58 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                        <td>  
-                                      
-                                            <div class="d-flex align-items-center bg-light px-1 py-0 rounded shadow-sm" style="height: 28px;">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-1"
-                                                    style="font-size: 0.75rem; line-height: 1rem;"
-                                                    wire:click="disminuir_cantidad({{ $item['producto_id'] }})">-</button>
+                                            <td>
 
-                                                <input type="number" min="1"
-                                                    wire:model.lazy="carrito.{{ $index }}.cantidad_detalle_venta"
-                                                    wire:change="actualizar_total($event.target.value, {{ $index }})"
-                                                    class="form-control form-control-sm text-center mx-1"
-                                                    style="width: 35px; height: 24px; padding: 2px; font-size: 0.75rem; -moz-appearance: textfield;-webkit-appearance: none;appearance: textfield;" />
+                                                <div class="d-flex align-items-center bg-light px-1 py-0 rounded shadow-sm" style="height: 28px;">
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-1"
+                                                        style="font-size: 0.75rem; line-height: 1rem;"
+                                                        wire:click="disminuir_cantidad({{ $item['producto_id'] }})">-</button>
 
-                                                <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-1"
-                                                    style="font-size: 0.75rem; line-height: 1rem;"
-                                                    wire:click="aumentar_cantidad({{ $item['producto_id'] }})">+</button>
-                                            </div>
-                                       
-                                        </td>
+                                                    <input type="number" min="1"
+                                                        wire:model.lazy="carrito.{{ $index }}.cantidad_detalle_venta"
+                                                        wire:change="actualizar_total($event.target.value, {{ $index }})"
+                                                        class="form-control form-control-sm text-center mx-1"
+                                                        style="width: 35px; height: 24px; padding: 2px; font-size: 0.75rem; -moz-appearance: textfield;-webkit-appearance: none;appearance: textfield;" />
+
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-1"
+                                                        style="font-size: 0.75rem; line-height: 1rem;"
+                                                        wire:click="aumentar_cantidad({{ $item['producto_id'] }})">+</button>
+                                                </div>
+
+                                            </td>
 
                                             <td>
-                                            <a class="text-danger" style="cursor: pointer; display: flex; align-items: center; justify-content: center;"
-                                                wire:click.prevent="eliminar_item_carrito({{ $index }})">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
+                                                <a class="text-danger" style="cursor: pointer; display: flex; align-items: center; justify-content: center;"
+                                                    wire:click.prevent="eliminar_item_carrito({{ $index }})">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                         @php $total_carrito += $item["total"]; @endphp
-                                    @empty
+                                        @empty
                                         <tr>
                                             <td colspan="5" class="text-center">No hay productos en el carrito.</td>
                                         </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="card-footer border-0">
-                        <br>
-                        <p class="text-muted d-flex justify-content-between fw-bold fs-5">
-                            Total:
-                            <span id="totalAmount">Lps. {{ number_format($total_carrito, 2, ".", ",") }}</span>
-                        </p>
-                        <input type="text" name="pagado" hidden>
+                        <div class="card-footer border-0">
+                            <br>
+                            <p class="text-muted d-flex justify-content-between fw-bold fs-5">
+                                Total:
+                                <span id="totalAmount">Lps. {{ number_format($total_carrito, 2, ".", ",") }}</span>
+                            </p>
+                            <input type="text" name="pagado" hidden>
 
-                        @if($total_carrito == 0)
+                            @if($total_carrito == 0)
                             <button class="btn btn-warning" type="button" disabled style="font-size: clamp(0.5rem, 3vw, 1rem); border: none; margin: 5px; width: 100%">
                                 <x-heroicon-o-exclamation-triangle style="width: 20px; height: 20px;" class="text-gray-900" />&nbsp;
                                 <span style="font-size: clamp(0.9rem, 3vw, 1.1rem)">Agregar productos</span>
                             </button>
-                        @else
+                            @else
                             <div class="d-flex align-items-center">
                                 <select class="form-select tom-select" name="tipo_pago" id="tipo_pago" wire:model="data.tipo_pago" style="margin-right: 10px;">
                                     <option value="" selected disabled>Seleccione el tipo de pago</option>
@@ -197,18 +247,19 @@
                                 </select>
 
                                 @if($data['tipo_pago'])
-                                    <a wire:click.prevent="guardar(true)"
-                                        class="btn btn-primary"
-                                        id="Submit"
-                                        style="font-size: clamp(0.5rem, 3vw, 1rem); border: none; margin: 5px; width: 100%"
-                                        wire:loading.attr="disabled"
-                                        onclick="disableButton(this)">
-                                        <x-heroicon-o-check-circle style="width: 20px; height: 20px;" class="text-white" />&nbsp;
-                                        <span style="font-size: clamp(0.9rem, 3vw, 1.1rem)">Finalizar venta</span>
-                                    </a>
+                                <a wire:click.prevent="guardar(true)"
+                                    class="btn btn-primary"
+                                    id="Submit"
+                                    style="font-size: clamp(0.5rem, 3vw, 1rem); border: none; margin: 5px; width: 100%"
+                                    wire:loading.attr="disabled"
+                                    onclick="disableButton(this)">
+                                    <x-heroicon-o-check-circle style="width: 20px; height: 20px;" class="text-white" />&nbsp;
+                                    <span style="font-size: clamp(0.9rem, 3vw, 1.1rem)">Finalizar venta</span>
+                                </a>
                                 @endif
                             </div>
-                        @endif
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

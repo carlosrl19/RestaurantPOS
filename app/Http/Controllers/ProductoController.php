@@ -16,25 +16,12 @@ class ProductoController extends Controller
     
     public function index(Request $request)
     {
-        // Obtener la letra seleccionada o la letra 'A' por defecto
-        $selectedProductLetter = $request->input('letter', 'A');
-    
-        $product_letters = Producto::selectRaw('UPPER(LEFT(product_name, 1)) as initial')
-            ->groupBy('initial')
-            ->orderBy('initial')
-            ->pluck('initial');
-    
-        $products = Producto::with('categoria')
-            ->where('product_name', 'LIKE', $selectedProductLetter . '%')
-            ->orderBy('product_name')
-            ->paginate(50);
-    
-        $categorias = \App\Models\Categoria::orderBy('nombre_Categoria')->get(); 
+        $products = Producto::get();
+
+        $categorias = Categoria::orderBy('category_name')->get(); 
     
         return view('modules.products.index', compact(
             'products',
-            'selectedProductLetter',
-            'product_letters',
             'categorias' 
         ));
     }

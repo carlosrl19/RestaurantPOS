@@ -35,16 +35,6 @@
             LISTADO PRINCIPAL DE PRODUCTOS 
         </div>
         <div class="card-body m-2">
-            <div class="col-12 mb-2" style="background-color: rgba(0, 0, 0, 0.05); padding: 10px; text-align: center">
-                <div class="d-flex flex-wrap justify-content-center">
-                    @foreach ($product_letters as $letter)
-                    <a href="{{ route('productos.index', ['letter' => $letter]) }}" style="text-decoration: none;"
-                        class="mx-1 px-2 py-1 border mb-2 {{ $selectedProductLetter == $letter ? 'bg-primary text-white' : 'bg-gray-300 text-muted' }}">
-                        {{ $letter }}
-                    </a>
-                    @endforeach
-                </div>
-            </div>
             <table id="products_table" class="display table table-striped" style="width: 100%;">
                 <thead>
                     <tr class="text-center text-white" style="background-color: #4e73df;">
@@ -73,7 +63,7 @@
                         </td>
 
                         <td>
-                            {{ $producto->categoria->nombre_Categoria ?? 'Sin categoría' }}
+                            {{ $producto->categoria->category_name ?? 'Sin categoría' }}
                         </td>
 
                         <td style="width: 8rem; max-width: 8rem; text-transform: uppercase">
@@ -119,9 +109,6 @@
                     @include('layouts._error_modals')
                 </tbody>
             </table>
-            <div class="col mt-3">
-                {{ $products->links()}}
-            </div>
         </div>
     </div>
 

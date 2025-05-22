@@ -13,14 +13,14 @@
           
           <!-- Nombre de la categoría -->
           <div class="mb-3 form-floating">
-            <input type="text" class="form-control @error('nombre_Categoria') is-invalid @enderror"
-                   id="nombre_Categoria" name="nombre_Categoria"
-                   value="{{ old('nombre_Categoria') }}"
+            <input type="text" class="form-control @error('category_name') is-invalid @enderror"
+                   id="category_name" name="category_name"
+                   value="{{ old('category_name') }}"
                    minlength="3" maxlength="30"
                    oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9 ., -Ñ]/g, '')"
                    required>
-            <label for="nombre_Categoria">Nombre de la categoría <span class="text-danger">*</span></label>
-            @error('nombre_Categoria')
+            <label for="category_name">Nombre categoría <span class="text-danger">*</span></label>
+            @error('category_name')
               <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
             @enderror
           </div>

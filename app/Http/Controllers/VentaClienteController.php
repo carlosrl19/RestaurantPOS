@@ -225,11 +225,12 @@ class VentaClienteController extends Controller
 
         // Renderizar el PDF
         $pdf->render();
-
-        $fileName = 'FACTURA CLIENTE FINAL.pdf';
+        $fileName = 'FACTURA-' . $venta->sale_invoice_number . '.pdf';
 
         return response($pdf->output(), 200)
             ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', 'inline; filename="' . $fileName . '"');
+            ->header('Content-Disposition', 'inline; filename="' . $fileName . '"')
+            ->header('Access-Control-Allow-Origin', '*') // Permite el acceso desde iframe
+            ->header('X-Frame-Options', 'ALLOW-FROM *'); // Permite embebido en iframe
     }
 }

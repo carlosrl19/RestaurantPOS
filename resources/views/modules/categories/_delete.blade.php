@@ -17,7 +17,7 @@
             <div class="col-md-12 text-center">
               <p class="mt-3">
                 Está a punto de realizar una acción irreversible. ¿Realmente desea eliminar la categoría
-                <strong style="text-transform: uppercase">{{ $categoria->nombre_Categoria }}</strong>?
+                <strong style="text-transform: uppercase">{{ $categoria->category_name }}</strong>?
               </p>
             </div>
           </div>

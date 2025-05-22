@@ -14,8 +14,8 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'system_logo_report' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'system_logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'system_logo_report' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'system_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'system_name' => 'required|string|min:3|max:25',
             'company_name' => 'required|string|min:3|max:25',
             'company_cai' => 'required|string|min:32|max:32',
@@ -31,13 +31,11 @@ class UpdateRequest extends FormRequest
     {
         return [
             // Logo Company messages
-            'system_logo_report.required' => 'El logo de la empresa es obligatorio.',
             'system_logo_report.image' => 'El logo de la empresa debe ser una imagen.',
             'system_logo_report.mimes' => 'El logo de la empresa debe ser un archivo de tipo: jpeg, png, jpg, gif, svg.',
             'system_logo_report.max' => 'El logo de la empresa no debe pesar más de 2MB.',
 
             // System Icon messages
-            'system_logo.required' => 'El ícono del sistema es obligatorio.',
             'system_logo.image' => 'El ícono del sistema debe ser una imagen.',
             'system_logo.mimes' => 'El ícono del sistema debe ser un archivo de tipo: jpeg, png, jpg, gif, svg.',
             'system_logo.max' => 'El ícono del sistema no debe pesar más de 2MB.',

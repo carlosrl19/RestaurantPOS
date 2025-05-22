@@ -67,7 +67,7 @@
                                         @foreach ($categorias as $categoria)
                                         <option value="{{ $categoria->id }}"
                                             {{ $producto->categoria_id == $categoria->id ? 'selected' : '' }}>
-                                            {{ $categoria->nombre_Categoria }}
+                                            {{ $categoria->category_name }}
                                         </option>
                                         @endforeach
                                     </select>
