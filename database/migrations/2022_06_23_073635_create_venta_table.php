@@ -22,7 +22,6 @@ return new class extends Migration
             $table->enum("estado", ['en_proceso', 'pagado'])->default("en_proceso");
 
             // Nuevas columnas
-            $table->enum('tipo_pago', ['EFECTIVO', 'TRANSFERENCIA', 'TARJETA']); // Solo admite ese tipo de valores al ingresar
             $table->string('voucher_pago')->nullable();
 
             $table->unsignedBigInteger('user_id');

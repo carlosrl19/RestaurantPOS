@@ -37,7 +37,6 @@ class VentaCreate extends Component
         "cliente_telefono" => "",
         "sale_invoice_client_type" => "",
         "estado",
-        "tipo_pago" => "",
     ];
 
     public $carrito = [];
@@ -79,8 +78,6 @@ class VentaCreate extends Component
             ->section('content');
     }
 
-
-
     public function mount($id = null)
     {
         if ($id != null) {
@@ -95,7 +92,6 @@ class VentaCreate extends Component
             $this->data["cliente_telefono"] = $this->venta->cliente->telephone;
             $this->data["sale_invoice_client_type"] = $this->venta->sale_invoice_client_type;
             $this->data["estado"] = $this->venta->estado;
-            $this->data["tipo_pago"] = $this->venta->tipo_pago;
 
             $productos = Producto::whereIn('id', $this->venta->detalle_venta->pluck('producto_id'))->get();
             foreach ($this->venta->detalle_venta as $item) {
@@ -129,10 +125,10 @@ class VentaCreate extends Component
         $ultima_venta = Venta::select('sale_invoice_number')->where('estado', 'pagado')->orderByDesc('id')->first();
 
         if (!$ultima_venta) {
-            return '001-001-00-00000001';
+            return '000-002-01-00000001';
         } else {
             $numero = (int) substr($ultima_venta->sale_invoice_number, -8) + 1;
-            return '001-001-00-' . str_pad($numero, 8, '0', STR_PAD_LEFT);
+            return '000-002-01-' . str_pad($numero, 8, '0', STR_PAD_LEFT);
         }
     }
 
@@ -225,8 +221,6 @@ class VentaCreate extends Component
     }
 
 
-
-
     public function disminuir_cantidad($producto_id, $cantidad = 1)
     {
         $index = array_search("{$producto_id}", array_column($this->carrito, 'producto_id'));
@@ -260,7 +254,6 @@ class VentaCreate extends Component
             $venta->cliente_id = $this->data["cliente_id"];
             $venta->sale_invoice_client_type = $this->data["sale_invoice_client_type"];
             $venta->total = $this->total;
-            $venta->tipo_pago = $this->data['tipo_pago'];
             $venta->estado = ($pagar == true ? "pagado" : "en_proceso");
             $venta->save();
 
@@ -283,7 +276,6 @@ class VentaCreate extends Component
                     $prodcuto->save();
                 }
 
-                $venta->tipo_pago = $this->data['tipo_pago'];
                 $venta->total = $this->total;
                 $venta->save();
             }
@@ -299,7 +291,6 @@ class VentaCreate extends Component
             $this->venta->sale_invoice_client_type = $this->data["sale_invoice_client_type"];
             $this->venta->total = $this->total;
             $this->venta->estado = $pagar == true ? "pagado" : "en_proceso";
-            $this->venta->tipo_pago = $this->tipo_pago;
             $this->venta->save();
 
             //elimino los items de esta venta para volver agregarlos con los nuevos cambios

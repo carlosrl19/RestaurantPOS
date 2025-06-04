@@ -16,7 +16,7 @@ class StoreRequest extends FormRequest
         return [
             'product_barcode' =>  'nullable|string|regex:/^[0-9]+$/|min:4|max:13|unique:productos',
             'product_name' => 'required|string|min:3|max:40',
-            'product_description' => 'nullable|string|min:5|max:255',
+            'product_description' => 'nullable|string|min:3|max:255',
             'product_stock' =>  'required|numeric|min:0',
             'product_buy_price' =>  'required|numeric|min:0.01',
             'product_sell_price' => 'required|numeric|max:999999999|gt:product_buy_price',

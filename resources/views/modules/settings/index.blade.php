@@ -56,7 +56,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-floating">
-                                <input type="text" readonly class="form-control" value="{{ $settings->system_name ?? 'N/A' }}">
+                                <input type="text" readonly class="form-control" value="{{ $settings->company_name ?? 'N/A' }}">
                                 <label for="system_name" class="form-label">Nombre de la empresa</label>
                             </div>
                         </div>
@@ -119,6 +119,17 @@
                         <div class="col">
                             <img class="mb-3" style="border: 1px solid #eee; padding: 5px; border-radius: 5px" id="systemIconPreviewOld" width="120" height="120" src="{{ Storage::url('sys_config/img/' . ($settings->system_logo ?? 'default_image.png')) }}"><br>
                             <p>Logo sistema</p>
+                        </div>
+                        <div class="col">
+                            <img class="mb-3" style="border: 1px solid #eee; padding: 5px; border-radius: 5px" id="systemBgLoginOld" width="200" height="120" src="{{ Storage::url('images/resources/' . ($settings->bg_login ?? 'bg_login.png')) }}"><br>
+                            <p>Background login</p>
+                        </div>
+                        <div class="col">
+                            <img class="mb-3" style="border: 1px solid #eee; padding: 5px; border-radius: 5px" id="systemIconPreviewOld" width="120" height="120" src="{{ Storage::url('images/resources/' . ($settings->system_favicon ?? 'favicon.ico')) }}"><br>
+                            <p>
+                            <x-heroicon-o-star style="width: 20px; height: 20px;" class="text-warning"/>
+                                Favicon
+                            </p>
                         </div>
                     </div>
                 </div>

@@ -34,6 +34,7 @@
             font-size: 9px;
             margin-bottom: 3mm;
             text-align: center;
+            text-transform: uppercase;
         }
 
         .divider {
@@ -137,7 +138,8 @@
     <div class="divider"></div>
 
     <div class="footer">
-        ¡Gracias por su compra!
+        ¡Gracias por su compra!<br>
+        CAI: {{ $settings->company_cai ?? 'CAI de empresa' }}<br>
     </div>
 
     <!-- Margen para cortar papel (comando específico para XP76IIH) -->

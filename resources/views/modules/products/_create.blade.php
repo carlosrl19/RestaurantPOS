@@ -39,11 +39,11 @@
 
                 <!-- Categoría -->
                 <div class="mb-3 form-floating">
-                  <select class="form-select @error('categoria_id') is-invalid @enderror"
+                  <select style="font-size: 0.8rem" class="form-select @error('categoria_id') is-invalid @enderror"
                     id="categoria_id" name="categoria_id" required>
                     <option value="" disabled selected>Seleccione categoría</option>
                     @foreach ($categorias as $categoria)
-                    <option value="{{ $categoria->id }}">{{ $categoria->category_name }}</option>
+                    <option value="{{ $categoria->id }}" {{ old('categoria_id') == $categoria->id ? 'selected' : '' }}>{{ $categoria->category_name }}</option>
                     @endforeach
                   </select>
                   <label for="categoria_id">Categoría <span class="text-danger">*</span></label>
@@ -124,10 +124,16 @@
                   </div>
                 </div>
 
-                <!-- Botones -->
-                <div class="d-flex justify-content-between">
-                  <a href="#" data-dismiss="modal" class="btn btn-sm btn-dark">Regresar</a>
-                  <button type="submit" class="btn btn-sm btn-primary">Registrar</button>
+                <!-- Submit buttons -->
+                <div class="row">
+                  <div class="col">
+                    <a href="#" data-dismiss="modal" class="btn btn-sm btn-dark">
+                      {{ __('Regresar') }}
+                    </a>
+                    <button type="submit" class="btn btn-sm btn-primary">
+                      {{ __('Registrar') }}
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -140,7 +146,8 @@
                   <div class="card-body text-center">
                     <img id="product_image_preview_create"
                       src="{{ Storage::url('images/resources/no_image_available.png') }}"
-                      class="rounded" style="object-fit: contain;" width="280" height="280">
+                      class="rounded img-fluid"
+                      style="object-fit: contain; max-height: 250px; width: 100%;">
                   </div>
                 </div>
               </div>

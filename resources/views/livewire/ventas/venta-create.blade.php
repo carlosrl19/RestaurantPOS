@@ -239,14 +239,6 @@
                             </button>
                             @else
                             <div class="d-flex align-items-center">
-                                <select class="form-select tom-select" name="tipo_pago" id="tipo_pago" wire:model="data.tipo_pago" style="margin-right: 10px;">
-                                    <option value="" selected disabled>Seleccione el tipo de pago</option>
-                                    <option value="EFECTIVO">EFECTIVO</option>
-                                    <option value="TRANSFERENCIA">TRANSFERENCIA</option>
-                                    <option value="TARJETA">TARJETA</option>
-                                </select>
-
-                                @if($data['tipo_pago'])
                                 <a wire:click.prevent="guardar(true)"
                                     class="btn btn-primary"
                                     id="Submit"
@@ -256,7 +248,6 @@
                                     <x-heroicon-o-check-circle style="width: 20px; height: 20px;" class="text-white" />&nbsp;
                                     <span style="font-size: clamp(0.9rem, 3vw, 1.1rem)">Finalizar venta</span>
                                 </a>
-                                @endif
                             </div>
                             @endif
                         </div>

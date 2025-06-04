@@ -9,8 +9,9 @@
     <meta name="author" content="">
 
     <title>{{ config('app.name') }}</title>
+    
     <!-- FAVICONS ICON -->
-    <link rel="shortcut icon" type="image/ico" href="{{ Storage::url('images/resources/logo.ico') }}">
+    <link rel="shortcut icon" type="image/ico" href="{{ Storage::url('images/resources/favicon.ico') }}">
 
     <!-- CSS Fontawesome -->
     <link href="{{ asset('admin/fontawesome/css/all.min.css') }}" rel="stylesheet">

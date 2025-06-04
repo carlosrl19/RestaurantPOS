@@ -51,11 +51,32 @@ class SettingsController extends Controller
                 $systemIcon = $iconName; // Ruta relativa para el enlace simbólico
             }
 
+            // Procesar y guardar la imagen para 'bg_login'
+            $bgLogin = null;
+            if ($request->hasFile('bg_login')) {
+                $image = $request->file('system_logo_report');
+                $imageName = 'bg_login.' . $image->getClientOriginalExtension();
+                $image->move(storage_path('app/public/images/resources/'), $imageName);
+                $bgLogin = $imageName; // Ruta relativa para el enlace simbólico
+            }
+
+            // Procesar y guardar la imagen para 'system_favicon'
+            $favicon = null;
+            if ($request->hasFile('system_favicon')) {
+                $image = $request->file('system_favicon');
+                $imageName = 'favicon.' . $image->getClientOriginalExtension();
+                $image->move(storage_path('app/public/images/resources/'), $imageName);
+                $favicon = $imageName; // Ruta relativa para el enlace simbólico
+            }
+
             // Crear el registro en la base de datos
             Settings::create([
                 'system_logo_report' => $logoCompany,
                 'system_logo' => $systemIcon,
+                'system_favicon' => $favicon,
+                'bg_login' => $bgLogin,
                 'system_name' => $request->input('system_name'),
+                'system_version' => $request->input('system_version'),
                 'company_name' => $request->input('company_name'),
                 'company_cai' => $request->input('company_cai'),
                 'company_rtn' => $request->input('company_rtn'),
@@ -103,7 +124,34 @@ class SettingsController extends Controller
                 $settings->system_logo = $iconName;
             }
 
+            if ($request->hasFile('system_favicon')) {
+                $oldFavicon = storage_path('app/public/images/resources/') . $settings->system_favicon;
+                if (file_exists($oldFavicon) && is_file($oldFavicon)) {
+                    unlink($oldFavicon);
+                }
+
+                // Procesar y guardar la imagen para 'system_favicon'
+                $icon = $request->file('system_favicon');
+                $favicon = 'favicon.' . $icon->getClientOriginalExtension();
+                $icon->move(storage_path('app/public/images/resources/'), $favicon);
+                $settings->system_favicon = $favicon;
+            }
+
+            if ($request->hasFile('bg_login')) {
+                $oldBgloginPath = storage_path('app/public/images/resources/') . $settings->bg_login;
+                if (file_exists($oldBgloginPath) && is_file($oldBgloginPath)) {
+                    unlink($oldBgloginPath);
+                }
+
+                // Procesar y guardar la imagen para 'bg_login'
+                $icon = $request->file('bg_login');
+                $bgLoginName = 'bg_login.' . $icon->getClientOriginalExtension();
+                $icon->move(storage_path('app/public/images/resources/'), $bgLoginName);
+                $settings->bg_login = $bgLoginName;
+            }
+
             $settings->system_name = $request->input('system_name');
+            $settings->system_version = $request->input('system_version');
             $settings->company_name = $request->input('company_name');
             $settings->company_cai = $request->input('company_cai');
             $settings->company_rtn = $request->input('company_rtn');

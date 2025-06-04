@@ -16,10 +16,13 @@ return new class extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->string('system_name', 25);
+            $table->string('system_version', 7);
+            $table->string('system_favicon');
             $table->string('system_logo');
             $table->string('system_logo_report');
+            $table->string('bg_login');
             $table->string('company_name', 25)->nullable();
-            $table->string('company_cai', 32)->nullable();
+            $table->string('company_cai', 37)->nullable();
             $table->string('company_rtn', 14)->nullable();
             $table->string('company_phone', 8)->nullable();
             $table->string('company_email', 50)->nullable();

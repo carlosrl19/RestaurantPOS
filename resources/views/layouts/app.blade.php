@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title')</title>
+    <title>Inicio de sesión</title>
 
     <!-- FAVICONS ICON -->
     <link rel="shortcut icon" type="image/ico" href="{{ Storage::url('images/resources/logo.ico') }}">

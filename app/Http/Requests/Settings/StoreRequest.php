@@ -16,9 +16,11 @@ class StoreRequest extends FormRequest
         return [
             'system_logo_report' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'system_logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'system_favicon' => 'required|image|mimes:ico',
+            'bg_login' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'system_name' => 'required|string|min:3|max:25',
             'company_name' => 'required|string|min:3|max:25',
-            'company_cai' => 'required|string|min:32|max:32',
+            'company_cai' => 'required|string|min:37|max:37',
             'company_rtn' => 'required|string|min:14|max:14',
             'company_phone' => 'required|string|min:8|max:8',
             'company_email' => 'required|email|max:50',
@@ -36,11 +38,22 @@ class StoreRequest extends FormRequest
             'system_logo_report.mimes' => 'El logo de la empresa debe ser un archivo de tipo: jpeg, png, jpg, gif, svg.',
             'system_logo_report.max' => 'El logo de la empresa no debe pesar más de 2MB.',
 
-            // System Icon messages
+            // System logo messages
             'system_logo.required' => 'El ícono del sistema es obligatorio.',
             'system_logo.image' => 'El ícono del sistema debe ser una imagen.',
             'system_logo.mimes' => 'El ícono del sistema debe ser un archivo de tipo: jpeg, png, jpg, gif, svg.',
             'system_logo.max' => 'El ícono del sistema no debe pesar más de 2MB.',
+
+            // System favicon messages
+            'system_favicon.required' => 'El favicon del sistema es obligatorio.',
+            'system_favicon.image' => 'El favicon del sistema debe ser una imagen.',
+            'system_favicon.mimes' => 'El favicon del sistema debe ser un archivo de tipo: ico.',
+
+            // System login background messages
+            'bg_login.required' => 'El background del login del sistema es obligatorio.',
+            'bg_login.image' => 'El background del login del sistema debe ser una imagen.',
+            'bg_login.mimes' => 'El background del login del sistema debe ser un archivo de tipo: jpeg, png, jpg, gif, svg., webp',
+            'bg_login.max' => 'El background del login del sistema no debe pesar más de 2MB.',
 
             // System name messages
             'system_name.required' => 'El nombre del sistema es obligatorio.',

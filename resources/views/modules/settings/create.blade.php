@@ -52,7 +52,7 @@
                     <div class="row g-3">
                         <div class="col-sm-12">
                             <div class="row mb-3">
-                                <div class="col-sm-4 mb-sm-0">
+                                <div class="col-sm-2 mb-sm-0">
                                     <div class="form-floating">
                                         <input type="text" class="form-control @error('system_name') is-invalid @enderror" id="system_name"
                                             name="system_name" value="{{ old('system_name') }}"
@@ -60,6 +60,18 @@
                                             style="text-transform: uppercase;">
                                         <label for="system_name" class="form-label">Nombre sistema <span class="text-danger">*</span></label>
                                         @error('system_name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 mb-sm-0">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control @error('system_version') is-invalid @enderror" id="system_version"
+                                            name="system_version" value="{{ old('system_version') }}" maxlength="7">
+                                        <label for="system_version" class="form-label">Versión sistema <span class="text-danger">*</span></label>
+                                        @error('system_version')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -83,7 +95,7 @@
                                 <div class="col-sm-4 mb-sm-0">
                                     <div class="form-floating">
                                         <input type="text" class="form-control @error('company_cai') is-invalid @enderror" id="company_cai"
-                                            name="company_cai" value="{{ old('company_cai') }}" maxlength="32" style="text-transform: uppercase;">
+                                            name="company_cai" value="{{ old('company_cai') }}" maxlength="37" style="text-transform: uppercase;">
                                         <label for="company_cai" class="form-label">CAI empresa <span class="text-danger">*</span></label>
                                         @error('company_cai')
                                         <span class="invalid-feedback" role="alert">
@@ -153,11 +165,19 @@
                                     </span>
                                     @enderror
                                 </div>
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <input type="file" accept="image/*" class="form-control @error('bg_login') is-invalid @enderror"
+                                        id="bg_login" name="bg_login">
+                                    @error('bg_login')
+                                    <span class="invalid-feedback" role="alert">
+                                        <p><strong>{{ $message }}<a target="_blank" href="https://www.iloveimg.com/es/comprimir-imagen"> Es necesario optimizar la imagen del usuario.</strong></a></p>
+                                    </span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 
                         <div class="row">
-
                             <!-- Product presentation card -->
                             <div class="col-sm-6 mb-3">
                                 <div class="col-sm-12">

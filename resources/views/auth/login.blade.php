@@ -11,10 +11,8 @@
                         @php
                         $settings = App\Models\Settings::first();
                         @endphp
-                        <img class="col-lg-6 d-lg-block"
-                            src="{{ $settings?->system_logo_report 
-                            ? Storage::url('sys_config/img/' . $settings->system_logo_report) 
-                            : Storage::url('images/resources/login_logo_default.png') }}">
+                        <img class="col-lg-6 d-lg-block p-4" src="{{ $settings?->system_logo_report ? Storage::url('sys_config/img/' . $settings->system_logo_report) : Storage::url('images/resources/login_logo_default.png') }}">
+
                         <div class="col-lg-6">
                             <div class="p-5">
                                 <div class="text-center">
@@ -67,7 +65,7 @@
 
 <style>
     body {
-        background-image: url('{{ Storage::url("images/resources/bg_login.jpg") }}') !important;
+        background-image: url('{{ $settings?->bg_login ? Storage::url('images/resources/' . $settings->bg_login) : Storage::url('images/resources/bg_login_default.webp') }}') !important;
         /* Ruta de tu imagen */
         background-size: cover;
         /* Hace que la imagen cubra todo el contenedor */

@@ -42,14 +42,26 @@
                     <div class="row g-3">
                         <div class="col-sm-12">
                             <div class="row mb-3">
-                                <div class="col-sm-4 mb-sm-0">
+                                <div class="col-sm-2 mb-sm-0">
                                     <div class="form-floating">
                                         <input type="text" class="form-control @error('system_name') is-invalid @enderror" id="system_name"
-                                            name="system_name" value="{{ $setting->system_name}}"
+                                            name="system_name" value="{{ $setting->system_name }}"
                                             maxlength="25"
                                             style="text-transform: uppercase;">
                                         <label for="system_name" class="form-label">Nombre sistema <span class="text-danger">*</span></label>
                                         @error('system_name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 mb-sm-0">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control @error('system_version') is-invalid @enderror" id="system_version"
+                                            name="system_version" value="{{ $setting->system_version }}" maxlength="7">
+                                        <label for="system_version" class="form-label">Versión sistema <span class="text-danger">*</span></label>
+                                        @error('system_version')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -73,7 +85,7 @@
                                 <div class="col-sm-4 mb-sm-0">
                                     <div class="form-floating">
                                         <input type="text" class="form-control @error('company_cai') is-invalid @enderror" id="company_cai"
-                                            name="company_cai" value="{{ $setting->company_cai }}" maxlength="32" style="text-transform: uppercase;">
+                                            name="company_cai" value="{{ $setting->company_cai }}" maxlength="37" style="text-transform: uppercase;">
                                         <label for="company_cai" class="form-label">CAI empresa <span class="text-danger">*</span></label>
                                         @error('company_cai')
                                         <span class="invalid-feedback" role="alert">
@@ -125,19 +137,44 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                <div class="col-sm-4 mb-3 mb-sm-0">
+                                    <label for="system_logo">Logo del sistema</label>
                                     <input type="file" accept="image/*" class="form-control @error('system_logo') is-invalid @enderror"
-                                        id="system_logo" name="system_logo" onchange="show_system_logo_create(event)">
+                                        id="system_logo" name="system_logo">
                                     @error('system_logo')
                                     <span class="invalid-feedback" role="alert">
                                         <p><strong>{{ $message }}<a target="_blank" href="https://www.iloveimg.com/es/comprimir-imagen"> Es necesario optimizar la imagen del usuario.</strong></a></p>
                                     </span>
                                     @enderror
                                 </div>
-                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                <div class="col-sm-4 mb-3 mb-sm-0">
+                                    <label for="system_logo_report">Logo del reporte/login</label>
                                     <input type="file" accept="image/*" class="form-control @error('system_logo_report') is-invalid @enderror"
-                                        id="system_logo_report" name="system_logo_report" onchange="show_system_logo_reports_create(event)">
+                                        id="system_logo_report" name="system_logo_report">
                                     @error('system_logo_report')
+                                    <span class="invalid-feedback" role="alert">
+                                        <p><strong>{{ $message }}<a target="_blank" href="https://www.iloveimg.com/es/comprimir-imagen"> Es necesario optimizar la imagen del usuario.</strong></a></p>
+                                    </span>
+                                    @enderror
+                                </div>
+                                <div class="col-sm-2 mb-3 mb-sm-0">
+                                    <label for="bg_login">Background del login</label>
+                                    <input type="file" accept="image/*" class="form-control @error('bg_login') is-invalid @enderror"
+                                        id="bg_login" name="bg_login">
+                                    @error('bg_login')
+                                    <span class="invalid-feedback" role="alert">
+                                        <p><strong>{{ $message }}<a target="_blank" href="https://www.iloveimg.com/es/comprimir-imagen"> Es necesario optimizar la imagen del usuario.</strong></a></p>
+                                    </span>
+                                    @enderror
+                                </div>
+                                <div class="col-sm-2 mb-3 mb-sm-0">
+                                    <label for="system_favicon">
+                                        <x-heroicon-o-star style="width: 20px; height: 20px;" class="text-warning" />
+                                        Favicon
+                                    </label>
+                                    <input type="file" accept=".ico" class="form-control @error('system_favicon') is-invalid @enderror"
+                                        id="system_favicon" name="system_favicon">
+                                    @error('system_favicon')
                                     <span class="invalid-feedback" role="alert">
                                         <p><strong>{{ $message }}<a target="_blank" href="https://www.iloveimg.com/es/comprimir-imagen"> Es necesario optimizar la imagen del usuario.</strong></a></p>
                                     </span>
@@ -147,24 +184,6 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                <div class="row mb-3">
-                                    <div class="col">
-                                        <div class="row mb-3">
-                                            <div class="col-md-6 text-center">
-                                                <img class="mb-3" style="margin: auto" id="logoPreviewOld" width="100" height="100" 
-                                                    src="{{ asset('storage/sys_config/img/' . $setting->system_logo_report) }}"><br>
-                                                <label for="logoPreviewOld">Imagen actual</label>
-                                            </div>
-                                            <div class="col-md-6 text-center">
-                                                <img class="mb-3" style="margin: auto" id="logoPreview" width="100" height="100"><br>
-                                                <label for="logoPreview">Imagen nueva</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <!-- Size error modal -->
                             <div class="modal fade" id="myModal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -215,7 +234,7 @@
 
                         <div class="row">
                             <div class="col-sm-12">
-                            <a href="javascript:history.back()" class="btn btn-sm btn-dark">
+                                <a href="javascript:history.back()" class="btn btn-sm btn-dark">
                                     Regresar
                                 </a>
                                 <button type="submit" class="btn btn-sm btn-primary">
@@ -229,10 +248,4 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('scripts')
-<!-- User create preview -->
-<script src="{{ asset('customjs/image_previews/settings_create.js') }}"></script>
-
 @endsection

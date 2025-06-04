@@ -16,6 +16,11 @@
         </div>
     </a>
 
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        {{ $settings->system_version }}
+    </div>
+
     @can('dashboard')
     <!-- Divider -->
     <hr class="sidebar-divider bg-white" style="margin-top: 1rem">
@@ -34,37 +39,48 @@
     </li>
     @endcan
 
-<li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProductos"
-        aria-expanded="false" aria-controls="collapseProductos">
-        <x-heroicon-o-square-3-stack-3d class="text-white" style="width: 20px; height: 20px;" />&nbsp;
-        <span class="text-white">Productos</span>
-    </a>
-    <div id="collapseProductos" class="collapse" aria-labelledby="headingProductos" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-        <a class="collapse-item" href="{{ route('productos.index') }}">Lista de productos</a>
-        <a class="collapse-item" href="{{ route('categorias.index') }}">Lista de categorias</a>
-        </div>
-    </div>
-</li>
+    <!-- Divider -->
+    <hr class="sidebar-divider bg-white" style="margin-top: 1rem">
 
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Productos / Servicios
+    </div>
 
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
-            aria-expanded="true" aria-controls="collapseOne">
-            <x-heroicon-o-shopping-bag class="text-white" style="width: 20px; height: 20px" />&nbsp;
-            <span class="text-white">Compras</span>
+        <a class="nav-link text-white" href="{{ route('categorias.index') }}">
+            <x-heroicon-o-cube class="text-white" style="width: 20px; height: 20px" />&nbsp;
+            <span>Categorias</span>
         </a>
-        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                @can('sidebar_provider')
-                <a class="collapse-item" href="{{route('proveedor.index')}}">Proveedores</a>
-                @endcan
-                @can('sidebar_purchase')
-                <a class="collapse-item" href="{{route('compras.index')}}">Registro de compras</a>
-                @endcan
-            </div>
-        </div>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link text-white" href="{{ route('productos.index') }}">
+            <x-heroicon-o-square-3-stack-3d class="text-white" style="width: 20px; height: 20px" />&nbsp;
+            <span>Productos</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider bg-white" style="margin-top: 1rem">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Compras
+    </div>
+
+    <li class="nav-item">
+        <a class="nav-link text-white" href="{{ route('proveedor.index') }}">
+            <x-heroicon-o-user-group class="text-white" style="width: 20px; height: 20px" />&nbsp;
+            <span>Proveedores</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link text-white" href="{{ route('compras.index') }}">
+            <x-heroicon-o-shopping-cart class="text-white" style="width: 20px; height: 20px" />&nbsp;
+            <span>Registro de compras</span>
+        </a>
     </li>
 
     <!-- Divider -->
@@ -111,5 +127,4 @@
         </a>
     </li>
     @endcan
-    
 </ul>

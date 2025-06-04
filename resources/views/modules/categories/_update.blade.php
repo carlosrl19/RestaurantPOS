@@ -25,10 +25,16 @@
             @enderror
           </div>
 
-          <!-- Botones -->
-          <div class="d-flex justify-content-between">
-            <button type="button" class="btn btn-sm btn-dark" data-dismiss="modal">Regresar</button>
-            <button type="submit" class="btn btn-sm btn-danger text-white">Guardar cambios</button>
+          <!-- Submit & cancel buttons -->
+          <div class="row">
+            <div class="col">
+              <a href="#" data-dismiss="modal" class="btn btn-sm btn-dark">
+                {{ __('Regresar') }}
+              </a>
+              <button type="submit" class="btn btn-sm btn-warning text-white">
+                {{ __('Guardar cambios') }}
+              </button>
+            </div>
           </div>
         </form>
       </div>

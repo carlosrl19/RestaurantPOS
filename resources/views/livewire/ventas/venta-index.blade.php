@@ -31,33 +31,16 @@
                     <thead>
                         <tr class="text-white text-center" style="background-color: #4e73df;">
                             <th>Fecha hora</th>
-                            <th>Tipo pago</th>
-                            <th>Comprobante</th>
                             <th>Nº documento</th>
                             <th>Estado venta</th>
                             <th>Empleado</th>
-                            <th>Imprimir</th>
+                            <th>Detalles</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($ventas as $venta)
                         <tr class="text-center" style="font-family: 'Nunito', sans-serif; font-size: small">
                             <td>{{ $venta->created_at }}</td>
-                            <td>{{ $venta->tipo_pago }}</td>
-                            <td>
-                                @if($venta->tipo_pago != 'EFECTIVO' && $venta->voucher_pago == null)
-                                <a href="#" data-toggle="modal" data-target="#voucher_pago{{ $venta->id }}" class="btn btn-sm btn-danger">Agregar voucher</a>
-                                @elseif($venta->tipo_pago == 'EFECTIVO')
-                                <span class="text-danger">No necesario</span>
-                                @else
-                                <div class="mx-1">
-                                    <a class="voucher_pago" data-gall="voucher_gallery" title="Voucher pago #{{ $venta->sale_invoice_number }}" data-fitview="true" href="{{ $venta->voucher_pago ? Storage::url('images/vouchers/' . $venta->voucher_pago) : asset('images/errors/error-404.png') }}">
-                                        <img src="{{ $venta->voucher_pago ? Storage::url('images/vouchers/' . $venta->voucher_pago) : asset('images/errors/error-404.png') }}"
-                                            style="border: 1px solid #e3e3e3; border-radius: 5px; min-height: 30px; max-height: 25px;" alt="">
-                                    </a>
-                                </div>
-                                @endif
-                            </td>
                             <td>
                                 <strong>
                                     {{ $venta->sale_invoice_number }}
@@ -70,8 +53,8 @@
                             </td>
                             <td>{{ $venta->user->name }}</td>
                             <td>
-                                <a href="" data-toggle="modal" data-target="#voucher_print" class="btn btn-sm btn-secondary">
-                                    <x-heroicon-o-printer style="width: 20px; height: 20px;" class="text-white" />
+                                <a href="" data-toggle="modal" data-target="#sell_details{{ $venta->id }}" class="btn btn-sm btn-secondary">
+                                    <x-heroicon-o-eye style="width: 20px; height: 20px;" class="text-white" />
                                 </a>
                             </td>
 
