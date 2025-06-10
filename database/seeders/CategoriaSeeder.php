@@ -11,17 +11,6 @@ class CategoriaSeeder extends Seeder
 {
     public function run()
     {
-        $categorias = [
-            'DESAYUNO',
-            'ALMUERZO',
-            'CENA',
-            'POSTRE',
-            'BEBIDAS GASEOSAS',
-            'BEBIDAS ALCOHOLICAS',
-        ];
-
-        foreach ($categorias as $nombre) {
-            Categoria::firstOrCreate(['category_name' => $nombre]);
-        }
+        //
     }
 }

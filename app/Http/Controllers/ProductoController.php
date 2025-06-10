@@ -13,10 +13,9 @@ use App\Models\Categoria;
 class ProductoController extends Controller
 {
     
-    
     public function index(Request $request)
     {
-        $products = Producto::get();
+        $products = Producto::paginate(50);
 
         $categorias = Categoria::orderBy('category_name')->get(); 
     

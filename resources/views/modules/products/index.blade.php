@@ -112,6 +112,8 @@
         </div>
     </div>
 
+    {{ $products->links() }}
+
     <!-- Create include -->
     @include('modules.products._create')
 
