@@ -70,6 +70,8 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                {{ $ventas->links() }}
             </div>
         </div>
     </div>

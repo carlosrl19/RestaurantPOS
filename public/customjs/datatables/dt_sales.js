@@ -27,6 +27,9 @@
         info: true,
         searching: true,
         lengthChange: true,
+        order: [
+            ['0', 'desc'] // Ordenado del último al primero
+        ],
         aLengthMenu: [
             [10, 20, 50],
             [10, 20, 50]
