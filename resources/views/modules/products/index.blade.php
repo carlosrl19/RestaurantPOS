@@ -32,9 +32,19 @@
 <div class="mb-4">
     <div class="card m-2">
         <div class="card-header bg-gray-700 text-white">
-            LISTADO PRINCIPAL DE PRODUCTOS 
+            LISTADO PRINCIPAL DE PRODUCTOS
         </div>
         <div class="card-body m-2">
+            <div class="col-12" style="background-color: rgba(0, 0, 0, 0.05); padding: 10px; text-align: center">
+                <div class="col mt-2">
+                    @foreach ($letters as $letter)
+                    <a style="text-decoration: none;" href="{{ route('productos.index', ['letter' => $letter]) }}"
+                        class="mx-1 px-2 py-1 border {{ $selectedLetter == $letter ? 'bg-primary text-white' : 'bg-gray-300 text-muted' }}">
+                        {{ $letter }}
+                    </a>
+                    @endforeach
+                </div>
+            </div>
             <table id="products_table" class="display table table-striped" style="width: 100%;">
                 <thead>
                     <tr class="text-center text-white" style="background-color: #4e73df;">
@@ -109,6 +119,9 @@
                     @include('layouts._error_modals')
                 </tbody>
             </table>
+            <div class="col mt-3">
+                {{ $products->links()}}
+            </div>
         </div>
     </div>
 

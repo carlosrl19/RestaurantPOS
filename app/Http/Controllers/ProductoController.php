@@ -12,19 +12,27 @@ use App\Models\Categoria;
 
 class ProductoController extends Controller
 {
-    
     public function index(Request $request)
     {
-        $products = Producto::paginate(50);
+        // Obtener la letra seleccionada o la letra 'A' por defecto
+        $selectedLetter = $request->input('letter', 'A');
 
-        $categorias = Categoria::orderBy('category_name')->get(); 
-    
-        return view('modules.products.index', compact(
-            'products',
-            'categorias' 
-        ));
+        // Obtener todas las letras iniciales de los nombres en mayúsculas
+        $letters = Producto::selectRaw('UPPER(LEFT(product_name, 1)) as initial')
+            ->groupBy('initial')
+            ->orderBy('initial')
+            ->pluck('initial');
+
+        // Obtener empleados cuyo nombre comience con la letra seleccionada
+        $products = Producto::where('product_name', 'LIKE', $selectedLetter . '%')
+            ->orderBy('product_name')
+            ->paginate(500);
+
+        $categorias = Categoria::orderBy('category_name')->get();
+
+        return view('modules.products.index', compact('products', 'letters', 'selectedLetter', 'categorias'));
     }
-    
+
 
     public function store(StoreRequest $request)
     {
@@ -36,25 +44,25 @@ class ProductoController extends Controller
         $crearprod->product_buy_price = $request->input('product_buy_price');
         $crearprod->product_sell_price = $request->input('product_sell_price');
         $crearprod->categoria_id = $request->input('categoria_id');
-    
+
         if ($request->hasFile('product_image')) {
             $image = $request->file('product_image');
             $file_name = uniqid() . '.' . $image->getClientOriginalExtension();
             $path = $image->storeAs('images/products', $file_name, 'public');
-    
+
             $optimizerChain = OptimizerChainFactory::create();
             $optimizerChain->optimize(storage_path('app/public/' . $path));
-    
+
             $crearprod['product_image'] = $file_name;
         } else {
             $crearprod['product_image'] = 'no_image_available.png';
         }
-    
+
         $crearprod->save();
-    
+
         return redirect()->route('productos.index')->with('success', 'Registro creado exitosamente.');
     }
-    
+
 
     public function update(UpdateRequest $request, $id)
     {
@@ -82,7 +90,7 @@ class ProductoController extends Controller
                     File::delete($oldImagePath);
                 }
             }
-            
+
 
             // Optimizar la imagen recién subida
             $optimizerChain = OptimizerChainFactory::create();

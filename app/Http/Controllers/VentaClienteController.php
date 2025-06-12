@@ -17,6 +17,14 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class VentaClienteController extends Controller
 {
+    public function index(Request $request)
+    {
+        $ventas = Venta::orderBy('created_at', 'desc')
+            ->paginate(50);
+
+        return view('modules.sales.index', compact('ventas'));
+    }
+
     // Cierre de caja diario
     public function generarFacturaPorFecha(Request $request)
     {
